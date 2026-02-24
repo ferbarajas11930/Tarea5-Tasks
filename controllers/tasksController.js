@@ -45,6 +45,7 @@ exports.deleteTasks = (req, res) => {
     res.json({ message: 'Tarea eliminada con éxito.' })
 }
 
+// Esto nuevo se añadio para actualizar una tarea, se usa PUT y se pasa el ID para actualizar en la URL
 exports.updateTask = (req, res) => {
     const tasks = readTasks();
     const id = parseInt(req.params.id);
