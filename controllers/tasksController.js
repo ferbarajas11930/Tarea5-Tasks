@@ -5,7 +5,7 @@ const tasksFile = path.join(__dirname, '../data/tasks.txt')
 
 const readTasks = () => {
     try {
-        if (!fs.exitsSync(tasksFile)) {
+        if (!fs.existsSync(tasksFile)) {
             return []
 
         }
@@ -44,3 +44,25 @@ exports.deleteTasks = (req, res) => {
     saveTask(tasks)
     res.json({ message: 'Tarea eliminada con éxito.' })
 }
+
+exports.updateTask = (req, res) => {
+    const tasks = readTasks();
+    const id = parseInt(req.params.id);
+    
+    // Buscamos el índice de la tarea
+    const taskIndex = tasks.findIndex(t => t.id === id);
+
+    if (taskIndex !== -1) {
+        // Actualizamos combinando los datos actuales con los que vienen en el body
+        tasks[taskIndex] = { 
+            ...tasks[taskIndex], 
+            ...req.body,
+            id: id // Nos aseguramos de que el ID no cambie accidentalmente
+        };
+
+        saveTask(tasks);
+        res.json(tasks[taskIndex]);
+    } else {
+        res.status(404).json({ message: "Tarea no encontrada" });
+    }
+};
